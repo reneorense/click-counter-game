@@ -18,6 +18,7 @@ body {
   place-items: center;
   font-family: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
   color: #fff;
+  /* Default rainbow background */
   background: linear-gradient(135deg, #ffd93d, #ff8c42, #ff4d6d, #9b5de5, #00bbf9);
   background-size: 300% 300%;
   animation: skyShift 15s ease infinite;
@@ -25,6 +26,7 @@ body {
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  transition: background 0.5s ease;
 }
 
 @keyframes skyShift {
@@ -32,6 +34,63 @@ body {
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* =========================================
+   HYPERDRIVE / WORMHOLE BACKGROUND
+   ========================================= */
+
+.warp-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+  
+  /* Creates the tunnel effect using a radial gradient */
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0,
+    transparent 10px,
+    rgba(0, 255, 255, 0.15) 15px,
+    rgba(0, 0, 0, 0.9) 30px,
+    transparent 40px
+  );
+  background-size: 200% 200%;
+  background-position: center;
+}
+
+/* Tier 1: Score 1000+ */
+body.tier-1 {
+  background: #000; /* Drops the rainbow to show the wormhole */
+}
+body.tier-1 .warp-bg {
+  opacity: 1;
+  animation: warpSpeed 3s linear infinite;
+}
+
+/* Tier 2: Score 3000+ */
+body.tier-2 .warp-bg {
+  opacity: 1;
+  animation: warpSpeed 1.2s linear infinite;
+}
+
+/* Tier 3: Score 5000+ */
+body.tier-3 .warp-bg {
+  opacity: 1;
+  animation: warpSpeed 0.4s linear infinite;
+}
+
+@keyframes warpSpeed {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+
+/* =========================================
+   UI ELEMENTS
+   ========================================= */
 
 .game {
   display: flex;
@@ -98,22 +157,51 @@ body {
 .stat span { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
 .stat small { font-size: 0.75rem; opacity: 0.95; letter-spacing: 0.5px; }
 
+/* =========================================
+   THE BUTTON & ITS UPGRADES
+   ========================================= */
+
 .click-btn {
   margin-top: 4px;
   width: clamp(160px, 42vw, 240px);
   height: clamp(160px, 42vw, 240px);
   border-radius: 50%;
   border: 8px solid #fff;
-  background: radial-gradient(circle at 30% 25%, #ff6b81, #e50027 70%);
   color: #fff;
   font-family: inherit;
   font-size: clamp(1.1rem, 3.4vw, 1.6rem);
   font-weight: 800;
   letter-spacing: 1px;
   cursor: pointer;
+  
+  /* Default Red */
+  background: radial-gradient(circle at 30% 25%, #ff6b81, #e50027 70%);
   box-shadow: 0 12px 0 #a3001b, 0 18px 30px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.25);
   animation: btnPulse 1.6s ease-in-out infinite;
-  transition: transform 0.06s ease, box-shadow 0.06s ease;
+  
+  transition: transform 0.06s ease, box-shadow 0.06s ease, background 0.5s ease;
+}
+
+/* Tier 2: Burning Orange/Yellow (1000+) */
+.click-btn.btn-tier-2 {
+  background: radial-gradient(circle at 30% 25%, #ffea00, #ff5500 70%);
+  box-shadow: 
+    0 12px 0 #cc4400, 
+    0 18px 40px rgba(255, 85, 0, 0.8), 
+    inset 0 -8px 16px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  text-shadow: 0 0 10px #fff;
+}
+
+/* Tier 3: Electric Blue (3000+) */
+.click-btn.btn-tier-3 {
+  background: radial-gradient(circle at 30% 25%, #e0ffff, #00d4ff 70%);
+  box-shadow: 
+    0 12px 0 #007799, 
+    0 18px 50px rgba(0, 212, 255, 0.9), 
+    inset 0 -8px 16px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  text-shadow: 0 0 15px #00d4ff;
 }
 
 @keyframes btnPulse {
@@ -121,15 +209,19 @@ body {
   50%      { transform: scale(1.05); }
 }
 
-.click-btn:hover { filter: brightness(1.08); }
+.click-btn:hover { filter: brightness(1.1); }
 
 .click-btn.pressed {
   transform: scale(0.92);
   animation: none;
-  box-shadow: 0 4px 0 #a3001b, 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 -4px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.5), 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 -4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .click-btn:focus-visible { outline: 4px solid #fff; outline-offset: 6px; }
+
+/* =========================================
+   HINTS, ACTIONS, & EFFECTS
+   ========================================= */
 
 .hint {
   font-size: clamp(0.85rem, 2.6vw, 1.05rem);
@@ -152,7 +244,6 @@ body {
   100% { opacity: 0; transform: translate(-50%, -220%) scale(1.6) rotate(25deg); }
 }
 
-/* Actions Area */
 .actions {
   display: flex;
   gap: 10px;
@@ -185,9 +276,7 @@ body {
 
 .pill-btn[hidden] { display: none; }
 
-.reset-btn {
-  background: linear-gradient(135deg, #00bbf9, #0077b6);
-}
+.reset-btn { background: linear-gradient(135deg, #00bbf9, #0077b6); }
 
 .install-btn {
   background: linear-gradient(135deg, #06d6a0, #00875a);
