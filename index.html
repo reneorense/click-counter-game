@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Click Frenzy! 🎉</title>
 
+  <!-- PWA: app manifest, theme color, and iOS icon -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#e50027">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
   <!-- Rounded, playful font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,5 +44,17 @@
   </main>
 
   <script src="script.js"></script>
+
+  <!-- PWA: register the service worker so the app works offline -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then((reg) => console.log('Service worker registered:', reg.scope))
+          .catch((err) => console.log('Service worker failed:', err));
+      });
+    }
+  </script>
+
 </body>
 </html>
