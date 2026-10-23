@@ -1,13 +1,14 @@
-
 /* =========================================
    Click Frenzy – game logic
    ========================================= */
 
 // ---------- Elements ----------
-const scoreEl  = document.getElementById('score');
-const cpsEl    = document.getElementById('cps');
-const bestEl   = document.getElementById('best');
-const clickBtn = document.getElementById('clickBtn');
+const scoreEl    = document.getElementById('score');
+const cpsEl      = document.getElementById('cps');
+const bestEl     = document.getElementById('best');
+const clickBtn   = document.getElementById('clickBtn');
+const resetBtn   = document.getElementById('resetBtn');
+const installBtn = document.getElementById('installBtn');
 
 // ---------- Settings (tweak to change difficulty) ----------
 const DECAY_GRACE  = 400;  // ms of quiet time before score starts melting
@@ -17,17 +18,15 @@ const DECAY_AMOUNT = 1;    // points lost per melt step
 // ---------- State ----------
 let score         = 0;
 let best          = Number(localStorage.getItem('clickFrenzyBest') || 0);
-let clickTimes    = [];    // timestamps of clicks in the last second
+let clickTimes    = [];
 let lastClickTime = 0;
 
 bestEl.textContent = best;
 
 // ---------- Clicking ----------
 
-// pointerdown = works with mouse, touch and pen, and feels instant
 clickBtn.addEventListener('pointerdown', handlePress);
 
-// Keyboard support (Space / Enter)
 clickBtn.addEventListener('keydown', (e) => {
   if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) {
     e.preventDefault();
@@ -42,7 +41,6 @@ function handlePress(e) {
 
   renderScore(true);
 
-  // Squish the button briefly
   clickBtn.classList.add('pressed');
   clearTimeout(clickBtn._pressTimer);
   clickBtn._pressTimer = setTimeout(
@@ -50,7 +48,6 @@ function handlePress(e) {
     90
   );
 
-  // Find where to spawn the emoji (keyboard presses have no coordinates)
   let x = e.clientX;
   let y = e.clientY;
   if (x === undefined || y === undefined) {
@@ -62,7 +59,6 @@ function handlePress(e) {
   spawnEmoji(x, y);
   playBoop(score);
 
-  // New personal best?
   if (score > best) {
     best = score;
     bestEl.textContent = best;
@@ -77,7 +73,7 @@ function renderScore(pop) {
 
   if (pop) {
     scoreEl.classList.remove('pop');
-    void scoreEl.offsetWidth; // force reflow so the animation replays
+    void scoreEl.offsetWidth;
     scoreEl.classList.add('pop');
   }
 }
@@ -86,11 +82,9 @@ function renderScore(pop) {
 setInterval(() => {
   const now = performance.now();
 
-  // 1. Clicks per second = number of clicks in the last 1000 ms
   clickTimes = clickTimes.filter(t => now - t < 1000);
   cpsEl.textContent = clickTimes.length;
 
-  // 2. Melt the score if the player stopped clicking
   const melting = score > 0 && now - lastClickTime > DECAY_GRACE;
   scoreEl.classList.toggle('melting', melting);
 
@@ -114,7 +108,6 @@ function spawnEmoji(x, y) {
   setTimeout(() => el.remove(), 800);
 }
 
-// Simple beep that gets higher in pitch as the score climbs
 let audioCtx = null;
 
 function playBoop(step) {
@@ -133,6 +126,84 @@ function playBoop(step) {
     osc.start();
     osc.stop(audioCtx.currentTime + 0.12);
   } catch (err) {
-    /* Audio isn't available – the game still works fine */
+    /* Audio not available – game still works */
   }
 }
+
+/* =========================================
+   NEW: Reset button
+   Resets the current score and CPS meter,
+   but keeps the best score as a record.
+   ========================================= */
+resetBtn.addEventListener('click', () => {
+  score = 0;
+  clickTimes = [];
+  lastClickTime = performance.now();
+  scoreEl.classList.remove('melting');
+  renderScore(true);
+
+  // Quick visual flourish so kids know something happened
+  const rect = resetBtn.getBoundingClientRect();
+  spawnEmoji(rect.left + rect.width / 2, rect.top);
+});
+
+/* =========================================
+   NEW: Install button (PWA)
+   - Android/Chrome: shows the native install prompt
+   - iOS Safari: shows step-by-step instructions
+   - Already installed: button stays hidden
+   ========================================= */
+
+const isStandalone =
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.navigator.standalone === true;
+
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+let deferredPrompt = null;
+
+// If already installed, never show the button
+if (isStandalone) {
+  installBtn.hidden = true;
+}
+// iOS never fires beforeinstallprompt – show the button with manual instructions
+else if (isIOS) {
+  installBtn.hidden = false;
+}
+
+// Android/Chrome/Edge: browser tells us the app is installable
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.hidden = false;
+});
+
+// Handle the install button tap
+installBtn.addEventListener('click', async () => {
+  if (isIOS) {
+    alert(
+      'To install on iPhone / iPad:\n\n' +
+      '1. Tap the Share button (square with an arrow)\n' +
+      '2. Scroll down and tap "Add to Home Screen"\n' +
+      '3. Tap "Add"\n\n' +
+      'The game will appear as an app icon on your home screen!'
+    );
+    return;
+  }
+
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+
+  if (outcome === 'accepted') {
+    installBtn.hidden = true;
+  }
+  deferredPrompt = null;
+});
+
+// Hide button once installation succeeds
+window.addEventListener('appinstalled', () => {
+  installBtn.hidden = true;
+  deferredPrompt = null;
+});
