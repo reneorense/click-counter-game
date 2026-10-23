@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Click Frenzy! 🎉</title>
 
+  <!-- Rounded, playful font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="game">
+    <h1 class="title">Click Frenzy! 🎉</h1>
+
+    <!-- The big score number -->
+    <div class="score" id="score">0</div>
+
+    <!-- Clicks per second + best score -->
+    <div class="stats">
+      <div class="stat">
+        <span id="cps">0</span>
+        <small>clicks / sec</small>
+      </div>
+      <div class="stat">
+        <span id="best">0</span>
+        <small>best score</small>
+      </div>
+    </div>
+
+    <!-- The big red button -->
+    <button id="clickBtn" class="click-btn" type="button">TAP ME!</button>
+
+    <p class="hint">Tap as fast as you can — but don't stop, or your score melts away! 🫠</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
