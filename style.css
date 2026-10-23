@@ -1,1 +1,206 @@
+/* =========================================
+   Click Frenzy – styles
+   ========================================= */
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  font-family: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
+  color: #fff;
+
+  /* Animated rainbow background */
+  background: linear-gradient(135deg, #ffd93d, #ff8c42, #ff4d6d, #9b5de5, #00bbf9);
+  background-size: 300% 300%;
+  animation: skyShift 15s ease infinite;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@keyframes skyShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ---------- Layout ---------- */
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 2vh, 20px);
+  padding: 16px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Title ---------- */
+
+.title {
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.15), 0 0 24px rgba(255, 255, 255, 0.5);
+  animation: titleBob 2.4s ease-in-out infinite;
+}
+
+@keyframes titleBob {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-8px) rotate(1deg); }
+}
+
+/* ---------- Big score ---------- */
+
+.score {
+  font-size: clamp(3.5rem, 16vw, 7rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 6px 0 rgba(0, 0, 0, 0.18), 0 0 30px rgba(255, 255, 255, 0.6);
+  transition: color 0.25s ease;
+}
+
+/* Played on every click */
+.score.pop {
+  animation: scorePop 0.18s ease-out;
+}
+
+@keyframes scorePop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* When the score is melting away */
+.score.melting {
+  color: #ffe066;
+}
+
+/* ---------- Stats pills ---------- */
+
+.stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110px;
+  padding: 6px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 3px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.stat span {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat small {
+  font-size: 0.75rem;
+  opacity: 0.95;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- The big red button ---------- */
+
+.click-btn {
+  margin-top: 4px;
+  width: clamp(160px, 42vw, 240px);
+  height: clamp(160px, 42vw, 240px);
+  border-radius: 50%;
+  border: 8px solid #fff;
+  background: radial-gradient(circle at 30% 25%, #ff6b81, #e50027 70%);
+  color: #fff;
+  font-family: inherit;
+  font-size: clamp(1.1rem, 3.4vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+
+  box-shadow:
+    0 12px 0 #a3001b,
+    0 18px 30px rgba(0, 0, 0, 0.3),
+    inset 0 -8px 16px rgba(0, 0, 0, 0.25);
+
+  animation: btnPulse 1.6s ease-in-out infinite;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+/* Gentle "breathe" so kids know it's the thing to press */
+@keyframes btnPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+
+.click-btn:hover {
+  filter: brightness(1.08);
+}
+
+/* Squish effect while pressed */
+.click-btn.pressed {
+  transform: scale(0.92);
+  animation: none;
+  box-shadow:
+    0 4px 0 #a3001b,
+    0 8px 16px rgba(0, 0, 0, 0.3),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.click-btn:focus-visible {
+  outline: 4px solid #fff;
+  outline-offset: 6px;
+}
+
+/* ---------- Hint text ---------- */
+
+.hint {
+  font-size: clamp(0.85rem, 2.6vw, 1.05rem);
+  max-width: 420px;
+  opacity: 0.95;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- Floating emojis on click ---------- */
+
+.pop-emoji {
+  position: fixed;
+  pointer-events: none;
+  font-size: 2rem;
+  transform: translate(-50%, -50%);
+  animation: floatUp 0.8s ease-out forwards;
+  z-index: 5;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -220%) scale(1.6) rotate(25deg);
+  }
+  }
