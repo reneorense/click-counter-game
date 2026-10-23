@@ -18,12 +18,9 @@ body {
   place-items: center;
   font-family: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
   color: #fff;
-
-  /* Animated rainbow background */
   background: linear-gradient(135deg, #ffd93d, #ff8c42, #ff4d6d, #9b5de5, #00bbf9);
   background-size: 300% 300%;
   animation: skyShift 15s ease infinite;
-
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -36,8 +33,6 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* ---------- Layout ---------- */
-
 .game {
   display: flex;
   flex-direction: column;
@@ -48,8 +43,6 @@ body {
   position: relative;
   z-index: 1;
 }
-
-/* ---------- Title ---------- */
 
 .title {
   font-size: clamp(1.6rem, 5vw, 2.8rem);
@@ -64,8 +57,6 @@ body {
   50%      { transform: translateY(-8px) rotate(1deg); }
 }
 
-/* ---------- Big score ---------- */
-
 .score {
   font-size: clamp(3.5rem, 16vw, 7rem);
   font-weight: 800;
@@ -75,9 +66,7 @@ body {
   transition: color 0.25s ease;
 }
 
-.score.pop {
-  animation: scorePop 0.18s ease-out;
-}
+.score.pop { animation: scorePop 0.18s ease-out; }
 
 @keyframes scorePop {
   0%   { transform: scale(1); }
@@ -85,11 +74,7 @@ body {
   100% { transform: scale(1); }
 }
 
-.score.melting {
-  color: #ffe066;
-}
-
-/* ---------- Stats pills ---------- */
+.score.melting { color: #ffe066; }
 
 .stats {
   display: flex;
@@ -110,19 +95,8 @@ body {
   backdrop-filter: blur(6px);
 }
 
-.stat span {
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1.1;
-}
-
-.stat small {
-  font-size: 0.75rem;
-  opacity: 0.95;
-  letter-spacing: 0.5px;
-}
-
-/* ---------- The big red button ---------- */
+.stat span { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
+.stat small { font-size: 0.75rem; opacity: 0.95; letter-spacing: 0.5px; }
 
 .click-btn {
   margin-top: 4px;
@@ -137,12 +111,7 @@ body {
   font-weight: 800;
   letter-spacing: 1px;
   cursor: pointer;
-
-  box-shadow:
-    0 12px 0 #a3001b,
-    0 18px 30px rgba(0, 0, 0, 0.3),
-    inset 0 -8px 16px rgba(0, 0, 0, 0.25);
-
+  box-shadow: 0 12px 0 #a3001b, 0 18px 30px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.25);
   animation: btnPulse 1.6s ease-in-out infinite;
   transition: transform 0.06s ease, box-shadow 0.06s ease;
 }
@@ -152,25 +121,15 @@ body {
   50%      { transform: scale(1.05); }
 }
 
-.click-btn:hover {
-  filter: brightness(1.08);
-}
+.click-btn:hover { filter: brightness(1.08); }
 
 .click-btn.pressed {
   transform: scale(0.92);
   animation: none;
-  box-shadow:
-    0 4px 0 #a3001b,
-    0 8px 16px rgba(0, 0, 0, 0.3),
-    inset 0 -4px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 0 #a3001b, 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 -4px 10px rgba(0, 0, 0, 0.25);
 }
 
-.click-btn:focus-visible {
-  outline: 4px solid #fff;
-  outline-offset: 6px;
-}
-
-/* ---------- Hint text ---------- */
+.click-btn:focus-visible { outline: 4px solid #fff; outline-offset: 6px; }
 
 .hint {
   font-size: clamp(0.85rem, 2.6vw, 1.05rem);
@@ -178,8 +137,6 @@ body {
   opacity: 0.95;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
-/* ---------- Floating emojis on click ---------- */
 
 .pop-emoji {
   position: fixed;
@@ -191,20 +148,11 @@ body {
 }
 
 @keyframes floatUp {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -220%) scale(1.6) rotate(25deg);
-  }
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-50%, -220%) scale(1.6) rotate(25deg); }
 }
 
-/* =========================================
-   NEW: Reset + Install pill buttons
-   ========================================= */
-
+/* Actions Area */
 .actions {
   display: flex;
   gap: 10px;
@@ -225,38 +173,28 @@ body {
   letter-spacing: 0.5px;
   box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.15);
   transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+  touch-action: manipulation;
 }
 
-.pill-btn:hover {
-  filter: brightness(1.08);
-}
+.pill-btn:hover { filter: brightness(1.08); }
 
 .pill-btn:active {
   transform: translateY(3px);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Make sure [hidden] wins over any display rule */
-.pill-btn[hidden] {
-  display: none;
-}
+.pill-btn[hidden] { display: none; }
 
-/* Reset – cool blue so it doesn't compete with the red button */
 .reset-btn {
   background: linear-gradient(135deg, #00bbf9, #0077b6);
 }
 
-/* Install – bright green with a soft glow to draw attention */
 .install-btn {
   background: linear-gradient(135deg, #06d6a0, #00875a);
   animation: installGlow 2s ease-in-out infinite;
 }
 
 @keyframes installGlow {
-  0%, 100% {
-    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.15);
-  }
-  50% {
-    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 24px rgba(6, 214, 160, 0.75);
-  }
-   }
+  0%, 100% { box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.15); }
+  50%      { box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 24px rgba(6, 214, 160, 0.75); }
+}
