@@ -75,7 +75,6 @@ body {
   transition: color 0.25s ease;
 }
 
-/* Played on every click */
 .score.pop {
   animation: scorePop 0.18s ease-out;
 }
@@ -86,7 +85,6 @@ body {
   100% { transform: scale(1); }
 }
 
-/* When the score is melting away */
 .score.melting {
   color: #ffe066;
 }
@@ -149,7 +147,6 @@ body {
   transition: transform 0.06s ease, box-shadow 0.06s ease;
 }
 
-/* Gentle "breathe" so kids know it's the thing to press */
 @keyframes btnPulse {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.05); }
@@ -159,7 +156,6 @@ body {
   filter: brightness(1.08);
 }
 
-/* Squish effect while pressed */
 .click-btn.pressed {
   transform: scale(0.92);
   animation: none;
@@ -203,4 +199,64 @@ body {
     opacity: 0;
     transform: translate(-50%, -220%) scale(1.6) rotate(25deg);
   }
+}
+
+/* =========================================
+   NEW: Reset + Install pill buttons
+   ========================================= */
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.pill-btn {
+  font-family: inherit;
+  font-weight: 800;
+  font-size: clamp(0.85rem, 2.4vw, 1rem);
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+}
+
+.pill-btn:hover {
+  filter: brightness(1.08);
+}
+
+.pill-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Make sure [hidden] wins over any display rule */
+.pill-btn[hidden] {
+  display: none;
+}
+
+/* Reset – cool blue so it doesn't compete with the red button */
+.reset-btn {
+  background: linear-gradient(135deg, #00bbf9, #0077b6);
+}
+
+/* Install – bright green with a soft glow to draw attention */
+.install-btn {
+  background: linear-gradient(135deg, #06d6a0, #00875a);
+  animation: installGlow 2s ease-in-out infinite;
+}
+
+@keyframes installGlow {
+  0%, 100% {
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.15);
   }
+  50% {
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18), 0 8px 24px rgba(6, 214, 160, 0.75);
+  }
+   }
